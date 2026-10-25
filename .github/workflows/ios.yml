@@ -1,0 +1,44 @@
+name: Build Vela iOS IPA
+
+on:
+push:
+branches: [main]
+workflow_dispatch:
+
+permissions:
+contents: read
+
+jobs:
+build:
+runs-on: macos-15
+steps:
+- name: Checkout repository
+uses: actions/checkout@v4
+
+  - name: Install XcodeGen
+    run: brew install xcodegen
+  - name: Generate Xcode project
+    run: xcodegen generate
+  - name: Build iOS app
+    run: |
+      xcodebuild \
+        -project VelaIOS.xcodeproj \
+        -scheme VelaIOS \
+        -configuration Release \
+        -sdk iphoneos \
+        -derivedDataPath build/DerivedData \
+        CODE_SIGNING_ALLOWED=NO \
+        build
+  - name: Package unsigned IPA
+    run: |
+      mkdir -p build/Payload
+      cp -R build/DerivedData/Build/Products/Release-iphoneos/Vela.app build/Payload/
+      cd build
+      zip -r VelaIOS-unsigned.ipa Payload
+  - name: Upload IPA
+    uses: actions/upload-artifact@v4
+    with:
+      name: VelaIOS-unsigned-ipa
+      path: build/VelaIOS-unsigned.ipa
+      if-no-files-found: error
+      retention-days: 14

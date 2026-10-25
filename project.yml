@@ -1,0 +1,23 @@
+name: VelaIOS
+
+options:
+bundleIdPrefix: app.velamaps
+deploymentTarget:
+iOS: “17.0”
+
+targets:
+VelaIOS:
+type: application
+platform: iOS
+sources:
+- path: Sources
+settings:
+base:
+PRODUCT_BUNDLE_IDENTIFIER: app.velamaps.ios
+PRODUCT_NAME: Vela
+SWIFT_VERSION: “5.0”
+TARGETED_DEVICE_FAMILY: “1,2”
+GENERATE_INFOPLIST_FILE: YES
+INFOPLIST_KEY_CFBundleDisplayName: Vela
+INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: “Vela usa la posizione per mostrare dove ti trovi e calcolare percorsi.”
+CODE_SIGNING_ALLOWED: NO
